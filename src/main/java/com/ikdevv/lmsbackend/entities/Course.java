@@ -2,6 +2,8 @@ package com.ikdevv.lmsbackend.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Course {
 
@@ -16,10 +18,11 @@ public class Course {
     @Column(nullable = false)
     private String name;
 
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<Student> students;
+
     @Column(nullable = false)
     private String description;
-
-
 
     @Column
     private int duration; // Duration in hours
@@ -55,5 +58,13 @@ public class Course {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

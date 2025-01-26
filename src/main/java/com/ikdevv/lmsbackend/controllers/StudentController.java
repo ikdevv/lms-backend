@@ -2,6 +2,8 @@ package com.ikdevv.lmsbackend.controllers;
 
 
 
+import com.ikdevv.lmsbackend.entities.Course;
+import com.ikdevv.lmsbackend.repositories.CourseRepository;
 import com.ikdevv.lmsbackend.services.StudentService;
 import com.ikdevv.lmsbackend.entities.Student;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,12 @@ import java.util.List;
 @RequestMapping("/api/students")
 public class StudentController {
     private final StudentService studentService;
+    private final CourseRepository courseRepository;
 
     @Autowired
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, CourseRepository courseRepository) {
         this.studentService = studentService;
+        this.courseRepository = courseRepository;
     }
 
     @GetMapping
@@ -31,8 +35,12 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        return ResponseEntity.ok(studentService.createStudent(student));
+    public Student createCourse(@RequestBody Student student) {
+        Long courseId = student.getCourse().getId(); // Get the department ID from the incoming course object
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+        student.setCourse(student.getCourse());
+        return studentService.createStudent(student);
     }
 
     @PutMapping("/{id}")

@@ -2,6 +2,8 @@ package com.ikdevv.lmsbackend.controllers;
 
 
 import com.ikdevv.lmsbackend.entities.Course;
+import com.ikdevv.lmsbackend.entities.Department;
+import com.ikdevv.lmsbackend.repositories.DepartmentRepository;
 import com.ikdevv.lmsbackend.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +16,12 @@ import java.util.List;
 public class CourseController {
 
     private final CourseService courseService;
+    private final DepartmentRepository departmentRepository;
 
     @Autowired
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, DepartmentRepository departmentRepository ) {
         this.courseService = courseService;
+        this.departmentRepository = departmentRepository;
     }
 
     @GetMapping
@@ -34,6 +38,11 @@ public class CourseController {
 
     @PostMapping
     public Course createCourse(@RequestBody Course course) {
+        Long departmentId = course.getDepartment().getId(); // Get the department ID from the incoming course object
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+
+        course.setDepartment(department);
         return courseService.createCourse(course);
     }
 
@@ -55,4 +64,5 @@ public class CourseController {
             return ResponseEntity.notFound().build();
         }
     }
+
 }

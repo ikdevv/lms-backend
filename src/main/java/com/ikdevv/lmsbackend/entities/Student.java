@@ -8,9 +8,14 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    private Course course;
+
+
     private String name;
     private String email;
-    private String course;
+
 
     // Getters and setters
     public Long getId() {
@@ -37,13 +42,6 @@ public class Student {
         this.email = email;
     }
 
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
 
     @Override
     public String toString() {
@@ -53,5 +51,13 @@ public class Student {
                 ", email='" + email + '\'' +
                 ", course='" + course + '\'' +
                 '}';
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Course getCourse() {
+        return course;
     }
 }
