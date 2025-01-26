@@ -7,6 +7,3 @@ spring.datasource.password=
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 
-spring.security.user.name=dulshan
-spring.security.user.password=password
-
